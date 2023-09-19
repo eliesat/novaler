@@ -8,19 +8,24 @@ LINE2="-------------------------------------------------------------------------
 
 echo "$LINE1"
 echo "> Installing dependencies be patient ...
-> it takes 2 to 10 minutes please wait..."
+> it takes 2 to 15 minutes please wait..."
 echo "$LINE1"
 sleep 5s
+
+echo "> start of process ..."
+sleep 3s
 
 # Check python
 pyVersion=$(python -c"from sys import version_info; print(version_info[0])")
 
-deps=("wget" "alsa-utils-aplay" "alsa-plugins" "astra-sm" "bzip2" "curl" "duktape" "dvbsnoop" "exteplayer3" "ffmpeg" "gstplayer" "openvpn" "p7zip" "rtmpdump" "unrar" "zip" "xz")
+deps=("wget" "alsa-plugins" "alsa-utils" "alsa-utils-aplay" "astra-sm" "bzip2" "curl" "duktape" "dvbsnoop" "exteplayer3" "ffmpeg" "gstplayer" "libusb-1.0-0" "libxml2" "libxslt" "openvpn" "p7zip" "rtmpdump" "enigma2-plugin-systemplugins-serviceapp" "unrar" "zip" "xz")
 
 if [ "$pyVersion" = 3 ]; then
-  deps+=( "livestreamersrv" "python3-backports-lzma" "python3-beautifulsoup4" "python3-certifi" "python3-cfscrape" "python3-chardet" "python3-compression" "python3-core" "python3-e2icjson" "python3-image" "python3-js2py" "python3-imaging" "python3-lxml" "python3-multiprocessing" "python3-mmap" "python3-ndg-httpsclient" "python3-pillow" "python3-pkgutil" "python3-pycurl" "python3-pyexecjs" "python3-pysocks" "python3-pycrypto" "python3-pydoc" "python3-requests" "python3-six" "python3-shell" "python3-sqlite3" "python3-urllib3" "python3-xmlrpc" )
+  deps+=( "livestreamersrv" "python3-backports-lzma" "python3-beautifulsoup4" "python3-certifi" "python3-chardet" "python3-cfscrape" "python3-codecs" "python3-core" "python3-compression" "python3-cryptography" "python3-difflib" "python3-e2icjson" "python3-futures3" "python3-html" "python3-image" "python3-imaging" "python3-js2py" "python3-json" "python3-lxml" "python3-mmap" "python3-misc" "python3-mechanize" "python3-multiprocessing" "python3-ndg-httpsclient" "python3-netclient" "python3-pillow" "python3-pkgutil" "python3-pycurl" "python3-pycrypto" "python3-pydoc" "python3-pyexecjs" "python3-pyopenssl" "python3-pysocks" "python3-robotparser" "python3-requests" "python3-shell" "python3-sqlite3" "python3-six" "python3-treq" "python3-twisted-web" "python3-unixadmin" "python3-urllib3" "python3-xmlrpc" )
+
 else
-  deps+=( "python-core" "python-lzma" "python-lxml" "python-requests" "python-beautifulsoup4" "python-six" "python-sqlite3" "python-pycrypto" "python-argparse" "python-imaging" "python-multiprocessing" "python-pydoc" "python-mmap" "python-xmlrpc" "python-certifi" "python-urllib3" "python-chardet" "python-pysocks" "python-js2py" "python-pyexecjs" "f4mdump" "hlsdl" "python-pycurl" "python-image" "python-ndg-httpsclient" )
+  
+deps+=( "f4mdump" "hlsdl" "kodi-addon-pvr-iptvsimple" "python-lzma" "python-argparse" "python-beautifulsoup4" "python-certifi" "python-chardet" "python-codecs" "python-compression" "python-core" "python-pycurl" "python-cryptography" "python-difflib" "python-futures" "python-html" "python-image" "python-imaging" "python-json" "python-js2py" "python-lxml" "python-lzma" "python-mechanize" "python-multiprocessing" "python-misc" "python-mmap" "python-ndg-httpsclient" "python-netclient" "python-pycrypto" "python-pyexecjs" "python-pydoc" "python-pyopenssl" "python-requests" "python-robotparser" "python-six" "python-shell" "python-sqlite3" "python-pysocks" "python-subprocess" "python-twisted-web" "python-unixadmin" "python-urllib3" "python-xmlrpc" )
 fi
 
 if [ -f /etc/opkg/opkg.conf ]; then
@@ -60,5 +65,18 @@ for i in "${deps[@]}"; do
 done
 
 rm -rf /var/cache/opkg/*
+rm -rf /var/lib/opkg/lists/*
+rm -rf /run/opkg.lock
+echo "> cache is cleaned...
+updating feeds please wait..."
+sleep 3s
+
+opkg update
+
+echo "> end of process...
+> your box will reboot now..."
+sleep 3s 
+
+reboot
 
 exit 0
